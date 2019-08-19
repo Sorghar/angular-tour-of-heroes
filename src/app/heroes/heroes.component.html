@@ -1,12 +1,9 @@
 <!-- Master record: list of heroes -->
 <h2>My Heroes</h2>
 <ul class="heroes">
-    <li *ngFor="let h of heroes"
-        [class.selected]="h === selectedHero"
-        (click)="onSelect(h)"> <!-- repeats list item element for each hero, applies the .selected css style when selected hero is the same as "h" and handles clicking on a hero-->
-      <span class="badge">{{h.id}}</span> {{h.name}}
+    <li *ngFor="let h of heroes">
+        <a routerLink='/detail/{{h.id}}'>
+            <span class="badge">{{h.id}}</span> {{h.name}}
+        </a>
     </li>
 </ul>
-
-<!-- Detail record: details of a selected hero -->
-<app-hero-detail [hero]="selectedHero"></app-hero-detail>
