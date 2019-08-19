@@ -1,0 +1,11 @@
+<!-- Only displays the messages area when there are messages to show -->
+<div *ngIf="messageService.messages.length">
+
+    <h2>Messages</h2>
+    <!-- Button to clear all displayed messages. -->
+    <button class="clear"
+            (click)="messageService.clear()">clear</button>
+    <!-- Repeats this element for each message. -->
+    <div *ngFor='let message of messageService.messages'> {{message}} </div>
+
+</div>
