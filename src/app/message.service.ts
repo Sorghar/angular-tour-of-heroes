@@ -9,7 +9,7 @@ export class MessageService {
 
   /** Adds a new message to the service storage. */
   add(message: string) {
-    this.messages.push(message);
+    this.messages.push(new Date().toLocaleTimeString() + ' | ' + message);
   }
 
   /** Clears all stored messages. */
