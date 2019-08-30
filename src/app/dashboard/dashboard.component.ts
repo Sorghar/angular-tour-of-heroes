@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Hero } from '../hero';
-import { HeroService } from '../hero.service';
-import { MessageService } from '../message.service';
+import { Store, select } from '@ngrx/store';
+import { HeroesState } from '../state/heroes.state';
+import * as HeroesAction from '../state/heroes.actions';
+import { getTopHeroes } from '../state/heroes.selectors';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-dashboard',
@@ -9,20 +12,13 @@ import { MessageService } from '../message.service';
     styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-    public heroes: Hero[] = [];
+    public heroes$: Observable<Hero[]>;
 
     constructor(
-        private heroService: HeroService,
-        private messageService: MessageService) { }
+        private store: Store<HeroesState>) { }
 
     ngOnInit() {
-        this.getHeroes();
-    }
-
-    getHeroes(): void {
-        this.heroService.getHeroes()
-            .subscribe(heroes => this.heroes = heroes.slice(1, 5),
-                       err => this.messageService.add('Dashboard: Error during emission: ' + err),
-                       () => this.messageService.add('Dashboard: All values emitted.'));
+        this.heroes$ = this.store.pipe(select(getTopHeroes));
+        this.store.dispatch(new HeroesAction.LoadTopHeroes());
     }
 }

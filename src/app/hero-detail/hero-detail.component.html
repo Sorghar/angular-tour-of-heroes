@@ -1,15 +1,15 @@
 <!-- Detail record: details of a selected hero
 This component simply receives a hero object through its input hero property and displays it. -->
 
-<div *ngIf="hero"> <!-- removes this whole section when hero is undefined -->
+<div *ngIf="hero$ | async as h"> <!-- removes this whole section when hero is undefined -->
 
     <p><button class="back" (click)="goBack()">Back</button></p>
 
-    <h2>{{hero.name | uppercase}} Details</h2>
-    <div><span>id: </span>{{hero.id}}</div>
+    <h2>{{h.name | uppercase}} Details</h2>
+    <div><span>id: </span>{{h.id}}</div>
     <div>
       <label>name:
-        <input [(ngModel)]="hero.name" placeholder="Enter a name"/>
+        <input [(ngModel)]="h.name" placeholder="Enter a name"/>
       </label>
     </div>
 
