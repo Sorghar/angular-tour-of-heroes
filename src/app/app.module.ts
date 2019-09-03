@@ -5,6 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './in-memory-data.service';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeroesComponent } from './heroes/heroes.component';
@@ -15,6 +17,9 @@ import { HeroSearchComponent } from './hero-search/hero-search.component';
 import { reducer } from './state/heroes.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { HeroEffects } from './state/heroes.effetcs';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NameEditorComponent } from './name-editor/name-editor.component';
+import { ProfileEditorComponent } from './profile-editor/profile-editor.component';
 
 @NgModule({
     declarations: [
@@ -23,7 +28,9 @@ import { HeroEffects } from './state/heroes.effetcs';
         HeroDetailComponent,
         MessagesComponent,
         DashboardComponent,
-        HeroSearchComponent
+        HeroSearchComponent,
+        NameEditorComponent,
+        ProfileEditorComponent
     ],
     imports: [
         BrowserModule,
@@ -35,9 +42,11 @@ import { HeroEffects } from './state/heroes.effetcs';
         // Remove it when a real server is ready to receive requests.
         HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, { dataEncapsulation: false }),
         StoreModule.forRoot({}),
+        StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
         StoreModule.forFeature('heroes', reducer),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([HeroEffects])
+        EffectsModule.forFeature([HeroEffects]),
+        ReactiveFormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

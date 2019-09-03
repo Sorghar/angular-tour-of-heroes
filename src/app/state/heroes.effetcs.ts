@@ -3,7 +3,7 @@ import { Action } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import * as heroActions from './heroes.actions';
-import { mergeMap, map, catchError, take, skip } from 'rxjs/operators';
+import { mergeMap, map, catchError, take, skip, switchMap } from 'rxjs/operators';
 import { HeroService } from '../hero.service';
 
 
@@ -52,7 +52,7 @@ export class HeroEffects {
     @Effect()
     selectHero$: Observable<Action> = this.actions$.pipe(
         ofType(heroActions.HeroesActionTypes.SelectHero),
-        mergeMap((action: heroActions.SelectHero) => this.heroService.getHero(action.payload).pipe(
+        switchMap((action: heroActions.SelectHero) => this.heroService.getHero(action.payload).pipe(
             map(hero => (new heroActions.SelectHeroSuccess(hero))),
             catchError((err: string) => of(new heroActions.SelectHeroFailed(err)))
         ))

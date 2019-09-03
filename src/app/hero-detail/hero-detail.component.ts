@@ -2,12 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Hero } from '../hero';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { HeroesState } from '../state/heroes.state';
 import { getSelectedHero } from '../state/heroes.selectors';
 import * as HeroesAction from '../state/heroes.actions';
-import { take } from 'rxjs/operators';
+import { take, skip, filter, tap, catchError } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-hero-detail',
@@ -16,7 +17,9 @@ import { take } from 'rxjs/operators';
 })
 export class HeroDetailComponent implements OnInit {
 
-    hero$: Observable<Hero>;
+    selectedHero$: Observable<Hero>;
+    fcHeroName = new FormControl('');
+    fcHeroID = new FormControl('');
 
     constructor(
         private route: ActivatedRoute,
@@ -25,8 +28,14 @@ export class HeroDetailComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.hero$ = this.store.pipe(select(getSelectedHero));
+        this.selectedHero$ = this.store.pipe(select(getSelectedHero));
         this.getHero();
+        this.selectedHero$.pipe(
+            filter(x => x != null) // initial state is null
+        ).subscribe(hero => {
+            this.fcHeroName.setValue(hero.name);
+            this.fcHeroID.setValue(hero.id);
+        });
     }
 
     getHero(): void {
@@ -39,11 +48,7 @@ export class HeroDetailComponent implements OnInit {
     }
 
     save(): void {
-        this.hero$.pipe(
-            take(1)
-            ).subscribe(hero => {
-                this.store.dispatch(new HeroesAction.UpdateHero(hero));
-                this.goBack();
-            }).unsubscribe();
+        this.store.dispatch(new HeroesAction.UpdateHero({ id: this.fcHeroID.value, name: this.fcHeroName.value } as Hero));
+        this.goBack();
     }
 }
