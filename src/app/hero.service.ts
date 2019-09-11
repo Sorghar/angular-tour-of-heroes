@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -14,8 +15,6 @@ export class HeroService {
         private msgService: MessageService,
         private http: HttpClient) { }
 
-    private heroesUrl = 'api/heroes';  // URL to web api
-
     httpOptions = {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
@@ -25,7 +24,7 @@ export class HeroService {
      */
     getHeroes(): Observable<Hero[]> {
         this.log('Fetching all heroes.');
-        return this.http.get<Hero[]>(this.heroesUrl).pipe(
+        return this.http.get<Hero[]>(this.createApiUrl('heroes')).pipe(
             tap(x => this.log('Fetched all heroes.')),
             catchError(this.handleError<Hero[]>('getHeroes', [])));
     }
@@ -47,7 +46,7 @@ export class HeroService {
 
     /** Returns an observable that emits a single value: a hero matching the provided id. */
     getHero(id: number): Observable<Hero> {
-        const url = `${this.heroesUrl}/${id}`;
+        const url = `${this.createApiUrl('heroes')}/${id}`;
         this.log(`Fetching hero id=${id}.`);
         return this.http.get<Hero>(url).pipe(
             tap(x => this.log(`Fetched hero id=${id}`)),
@@ -56,14 +55,15 @@ export class HeroService {
 
     /** PUT: update an existing hero on the server */
     updateHero(hero: Hero): Observable<any> {
-        return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
+        const url = `${this.createApiUrl('heroes')}/${hero.id}`;
+        return this.http.put(url, hero, this.httpOptions).pipe(
             tap(x => this.log(`updated hero id=${hero.id}`)),
             catchError(this.handleError<any>('updateHero')));
     }
 
     /** POST: add a new hero to the server */
     addHero(heroName: string): Observable<Hero> {
-        return this.http.post<Hero>(this.heroesUrl, {name: heroName} as Hero, this.httpOptions).pipe(
+        return this.http.post<Hero>(this.createApiUrl('heroes'), {name: heroName} as Hero, this.httpOptions).pipe(
             tap((newHero: Hero) => this.log(`added hero with id=${newHero.id}`)),
             catchError(this.handleError<Hero>('addHero')));
     }
@@ -71,7 +71,7 @@ export class HeroService {
     /** DELETE: delete the specified hero from the server */
     deleteHero(hero: Hero): Observable<Hero> {
         const id = typeof hero === 'number' ? hero : hero.id;
-        const url = `${this.heroesUrl}/${id}`;
+        const url = `${this.createApiUrl('heroes')}/${id}`;
 
         return this.http.delete<Hero>(url, this.httpOptions).pipe(
             tap(_ => this.log(`deleted hero id=${id}`)),
@@ -86,7 +86,7 @@ export class HeroService {
             return of([]);
         }
 
-        return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
+        return this.http.get<Hero[]>(`${this.createApiUrl('heroes')}/?name=${term}`).pipe(
             tap(_ => this.log(`found heroes matching "${term}"`)),
             catchError(this.handleError<Hero[]>('searchHeroes', []))
         );
@@ -95,5 +95,13 @@ export class HeroService {
     /** Log a HeroService message with the MessageService */
     private log(message: string) {
         this.msgService.add(`HeroService: ${message}`);
+    }
+
+    private createApiUrl(controllerName: string, methodAndParameters?: string): string {
+        const apiUrl = `${environment.apiUrl}/api/${controllerName}`;
+        if (methodAndParameters) {
+            return `${apiUrl}/${methodAndParameters}`;
+        }
+        return apiUrl;
     }
 }

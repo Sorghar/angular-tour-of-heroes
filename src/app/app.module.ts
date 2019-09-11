@@ -40,7 +40,7 @@ import { ProfileEditorComponent } from './profile-editor/profile-editor.componen
         // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
         // and returns simulated server responses.
         // Remove it when a real server is ready to receive requests.
-        HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, { dataEncapsulation: false }),
+        // HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, { dataEncapsulation: false }),
         StoreModule.forRoot({}),
         StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
         StoreModule.forFeature('heroes', reducer),
