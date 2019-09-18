@@ -1,6 +1,6 @@
+<a *ngIf="messageService.messages.length" class="toggle" (click)=toggleVisibility()>{{visibilityCaption}}</a>
 <!-- Only displays the messages area when there are messages to show -->
-<div *ngIf="messageService.messages.length">
-
+<div *ngIf="messageService.messages.length && messagesVisible">
     <h2>Messages</h2>
     <!-- Button to clear all displayed messages. -->
     <button class="clear"
