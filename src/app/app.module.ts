@@ -20,6 +20,7 @@ import { HeroEffects } from './state/heroes.effetcs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NameEditorComponent } from './name-editor/name-editor.component';
 import { ProfileEditorComponent } from './profile-editor/profile-editor.component';
+import { FormsComponent } from './forms/forms.component';
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import { ProfileEditorComponent } from './profile-editor/profile-editor.componen
         DashboardComponent,
         HeroSearchComponent,
         NameEditorComponent,
-        ProfileEditorComponent
+        ProfileEditorComponent,
+        FormsComponent
     ],
     imports: [
         BrowserModule,
