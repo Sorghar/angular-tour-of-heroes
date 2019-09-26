@@ -5,8 +5,8 @@ This component simply receives a hero object through its input hero property and
 
     <p><button class="back" (click)="goBack()">Back</button></p>
 
-    <h2>{{fcHeroName.value | uppercase}} Details</h2>
-    <div><span>id: </span>{{fcHeroID.value}}</div>
+    <h2>{{fcHeroName?.value | uppercase}} Details</h2>
+    <div><span>id: </span>{{fcHeroID?.value}}</div>
     <div>
       <label>name:
         <!-- <input [(ngModel)]="h.name" placeholder="Enter a name"/> -->
