@@ -21,6 +21,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NameEditorComponent } from './name-editor/name-editor.component';
 import { ProfileEditorComponent } from './profile-editor/profile-editor.component';
 import { FormsComponent } from './forms/forms.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
     declarations: [
@@ -49,6 +51,8 @@ import { FormsComponent } from './forms/forms.component';
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([HeroEffects]),
         ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatSliderModule
     ],
     providers: [],
     bootstrap: [AppComponent]
