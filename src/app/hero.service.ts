@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Hero } from './hero';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -25,7 +25,7 @@ export class HeroService {
     getHeroes(): Observable<Hero[]> {
         this.log('Fetching all heroes.');
         return this.http.get<Hero[]>(this.createApiUrl('heroes')).pipe(
-            tap(x => this.log('Fetched all heroes.')),
+            tap(() => this.log('Fetched all heroes.')),
             catchError(this.handleError<Hero[]>('getHeroes', [])));
     }
 
@@ -49,7 +49,7 @@ export class HeroService {
         const url = `${this.createApiUrl('heroes')}/${id}`;
         this.log(`Fetching hero id=${id}.`);
         return this.http.get<Hero>(url).pipe(
-            tap(x => this.log(`Fetched hero id=${id}`)),
+            tap(() => this.log(`Fetched hero id=${id}`)),
             catchError(this.handleError<Hero>(`getHero id=${id}`)));
     }
 
@@ -57,7 +57,7 @@ export class HeroService {
     updateHero(hero: Hero): Observable<any> {
         const url = `${this.createApiUrl('heroes')}/${hero.id}`;
         return this.http.put(url, hero, this.httpOptions).pipe(
-            tap(x => this.log(`updated hero id=${hero.id}`)),
+            tap(() => this.log(`updated hero id=${hero.id}`)),
             catchError(this.handleError<any>('updateHero')));
     }
 
